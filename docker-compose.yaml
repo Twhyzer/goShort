@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  short:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile 
+    restart: always
+    ports: 
+    - 80:80
