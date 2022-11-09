@@ -1,18 +1,20 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
+	"fmt"
+	"net/http"
+
+	"github.com/Twhyzer/goShort/src/api"
+
+	"github.com/gorilla/mux"
 )
 
-func handlerFunc(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "text/html")
-    fmt.Fprint(w, "<h1>Hello World!</h1>")
-}
 
 func main() {
-    mux := &http.ServeMux{}
-    mux.HandleFunc("/", handlerFunc)
-    fmt.Println("Starting the server on :80")
-    http.ListenAndServe(":80", mux)
+	fmt.Println("Starting the server on :80")
+
+	r := mux.NewRouter()
+	r.HandleFunc("/short", api.HandlerFunc).Methods(http.MethodPost)
+	http.ListenAndServe(":80", r)
+
 }

@@ -6,7 +6,5 @@ services:
       context: ./
       dockerfile: ./Dockerfile 
     restart: always
-    volumes:
-      - "./:/app/"
     ports: 
     - 80:80
