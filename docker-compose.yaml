@@ -5,6 +5,8 @@ networks:
 
 services:
   short:
+    env_file: 
+      ./.env
     build:
       context: ./
       dockerfile: ./Dockerfile 
@@ -24,10 +26,10 @@ services:
     networks:
       - goShort
     volumes:
-       - database-data:/data/postgres
+       - database:/data/postgres
        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
 
 volumes:
-  database-data:
+  database:
