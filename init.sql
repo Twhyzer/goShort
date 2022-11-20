@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS links (
+   id serial PRIMARY KEY,
+   inputurl TEXT NOT NULL,
+   shorturl TEXT NOT NULL,
+   redirects INTEGER NOT NULL DEFAULT '0',
+   creation TIMESTAMP WITH TIME ZONE NOT NULL
+);
