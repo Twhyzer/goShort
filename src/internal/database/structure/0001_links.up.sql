@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS links (
+CREATE TABLE links (
    id serial PRIMARY KEY,
    inputurl TEXT NOT NULL,
    shorturl TEXT NOT NULL,

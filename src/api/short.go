@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -8,9 +9,9 @@ import (
 	"github.com/Twhyzer/goShort/src/internal/database"
 )
 
-func HandlerFunc(Connection database.DatabaseConnection) func(w http.ResponseWriter, r *http.Request) {
+func HandlerFunc(dbConn *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		_, err := database.InsertShortURL(Connection.Database, "https://test.de", "https://t.de")
+		_, err := database.InsertShortURL(dbConn, "https://test.de", "https://t.de")
 
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
