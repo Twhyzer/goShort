@@ -7,11 +7,16 @@ import (
 	"net/http"
 
 	"github.com/Twhyzer/goShort/src/internal/database"
+	"github.com/Twhyzer/goShort/src/internal/shorter"
 )
 
 func HandlerFunc(dbConn *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		_, err := database.InsertShortURL(dbConn, "https://test.de", "https://t.de")
+		domain := r.FormValue("domain")
+
+		short_domain := shorter.CreateShortURL()
+
+		_, err := database.InsertShortURL(dbConn, domain, short_domain)
 
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
@@ -19,14 +24,18 @@ func HandlerFunc(dbConn *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 			io.WriteString(w, err.Error())
 		}
 
-		shortsByte, err := json.Marshal("https://t.de")
-
-		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
-			io.WriteString(w, "JSON Creation Failed: ")
-			io.WriteString(w, err.Error())
-		}
-
-		w.Write(shortsByte)
+		handleJSONResponse(w, short_domain)
 	}
+}
+
+func handleJSONResponse(w http.ResponseWriter, data string) {
+	json, err := json.Marshal(data)
+
+	if err != nil {
+		io.WriteString(w, "JSON Creation Failed: ")
+		io.WriteString(w, err.Error())
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(json)
 }
