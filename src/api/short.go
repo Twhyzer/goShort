@@ -1,22 +1,21 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"net/http"
 
-	"github.com/Twhyzer/goShort/src/internal/database"
 	"github.com/Twhyzer/goShort/src/internal/shorter"
+	"github.com/Twhyzer/goShort/src/internal/util"
 )
 
-func HandlerFunc(dbConn *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+func HandlerFunc() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		domain := r.FormValue("domain")
 
-		short_domain := shorter.CreateShortURL()
+		shortKey, err := shorter.CreateShortURL(domain)
+		shortDomain := util.CreateShortDomain(shortKey)
 
-		_, err := database.InsertShortURL(dbConn, domain, short_domain)
 
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
@@ -24,7 +23,7 @@ func HandlerFunc(dbConn *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 			io.WriteString(w, err.Error())
 		}
 
-		handleJSONResponse(w, short_domain)
+		handleJSONResponse(w, shortDomain)
 	}
 }
 

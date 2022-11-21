@@ -1,12 +1,11 @@
 package database
 
-import (
-	"database/sql"
-)
+import "database/sql"
 
 
-func InsertShortURL(db *sql.DB, inputurl string, shorturl string) (string, error){
-	stmt, err := db.Prepare("INSERT INTO links (inputurl, shorturl) VALUES ($1, $2)"); 
+func InsertShortURL(inputurl string, shorturl string) (string, error){
+	dbConn := createDatabaseConnection()
+	stmt, err := dbConn.Prepare("INSERT INTO links (inputurl, shorturl) VALUES ($1, $2)"); 
 
 	if err != nil {
 		return "Prepare Statement Error", err;
@@ -18,5 +17,15 @@ func InsertShortURL(db *sql.DB, inputurl string, shorturl string) (string, error
 		return "Execute Error", err
 	}
 
-	return "", nil
+	return shorturl, nil
+}
+
+func createDatabaseConnection() *sql.DB {
+	dbConn, dbConnErr := NewAppDatabase()
+
+	if dbConnErr != nil {
+		panic(dbConnErr.Error())
+	}
+
+	return dbConn
 }
