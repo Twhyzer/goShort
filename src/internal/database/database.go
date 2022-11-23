@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Connects to the database and migrates it if necessary.
 func NewAppDatabase() (*sql.DB, error) {
 	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("POSTGRES_HOST"),

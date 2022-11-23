@@ -54,6 +54,7 @@ func migrateFromEmbedFS(db *sql.DB, embedFS embed.FS, databaseName string) error
 	return nil
 }
 
+// Verifies the database
 func IsErrDatabaseDirty(errorMessage string) (int, error) {
 	regex, regexErr := regexp.Compile("Dirty database version ([0-9]+). Fix and force version.")
 	if regexErr != nil {

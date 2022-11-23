@@ -9,6 +9,7 @@ import (
 
 const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
+// Validator for URLs
 func ValidateDomain(domain string) bool {
 	url, err := url.Parse(domain)
 
@@ -23,7 +24,8 @@ func ValidateDomain(domain string) bool {
 	return true
 }
 
-func GenerateRouteKey(length int) string {
+// Generates a random string with a specified length
+func RandomString(length int) string {
 	bytes := make([]byte, length)
 
 	for i := range bytes {
@@ -33,7 +35,8 @@ func GenerateRouteKey(length int) string {
 	return string(bytes)
 }
 
+// Creates the short URL from the target domain and the short key
 func CreateShortDomain(routeKey string) string {
-	domain := fmt.Sprintf("%s%s", os.Getenv("TARGET_DOMAIN"),routeKey)
+	domain := fmt.Sprintf("%s%s", os.Getenv("TARGET_DOMAIN"), routeKey)
 	return domain
 }

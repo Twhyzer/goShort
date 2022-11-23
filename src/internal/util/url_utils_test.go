@@ -1,9 +1,8 @@
 package util
 
-import (
-	"testing"
-)
+import "testing"
 
+// Tests domains without focus on specific URL components
 func TestValidateDomain(t *testing.T) {
 
 	tests := []struct {
@@ -25,6 +24,7 @@ func TestValidateDomain(t *testing.T) {
 	}
 }
 
+// Tests domains with focus on schemes
 func TestValidateDomainScheme(t *testing.T) {
 
 	tests := []struct {
@@ -48,7 +48,8 @@ func TestValidateDomainScheme(t *testing.T) {
 	}
 }
 
-func TestValidateDomainHost(t *testing.T) {
+// Tests domains with focus on TLDs
+func TestValidateDomainTld(t *testing.T) {
 
 	tests := []struct {
 		domain   string
@@ -69,9 +70,10 @@ func TestValidateDomainHost(t *testing.T) {
 	}
 }
 
-func TestGenerateRouteKey(t *testing.T) {
+// Tests the route key generator for the length
+func TestRandomStringLength(t *testing.T) {
 	expected := 4
-	random := GenerateRouteKey(expected)
+	random := RandomString(expected)
 	actual := len(random)
 
 	if len(random) != expected {
