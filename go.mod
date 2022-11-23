@@ -4,12 +4,9 @@ go 1.19
 
 require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
-	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/mux v1.8.0
 	github.com/lib/pq v1.10.7
 )
-
-require google.golang.org/protobuf v1.27.1 // indirect
 
 require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
