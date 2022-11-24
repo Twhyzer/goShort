@@ -31,7 +31,6 @@ func HandleShortCreate() func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
 func HandleShortDelete() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseMultipartForm(10 << 20)
@@ -41,6 +40,7 @@ func HandleShortDelete() func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			handleJSONResponse(w, "The key was not found.")
+			return
 		}
 
 		handleJSONResponse(w, "Success")
@@ -59,6 +59,8 @@ func HandleShortRedirect() func(w http.ResponseWriter, r *http.Request) {
 			io.WriteString(w, "{\"error\": \"Invalid Key\"}")
 			return
 		}
+
+		database.CountRedirectUpByKey(short.RequestKey)
 
 		http.Redirect(w, r, short.TargetUrl, http.StatusPermanentRedirect)
 	}

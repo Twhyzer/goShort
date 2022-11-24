@@ -17,7 +17,7 @@ func main() {
 	r.HandleFunc("/", api.HandleShortCreate()).Methods(http.MethodPost)
 	r.HandleFunc("/", api.HandleShortDelete()).Methods(http.MethodDelete)
 	r.HandleFunc("/{key}", api.HandleShortRedirect()).Methods(http.MethodGet)
-	r.HandleFunc("/", resourceNotExistent)
+	r.NotFoundHandler = http.HandlerFunc(resourceNotExistent)
 	http.ListenAndServe(":80", r)
 }
 

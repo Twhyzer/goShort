@@ -1,8 +1,6 @@
 package database
 
-import (
-	"database/sql"
-)
+import "fmt"
 
 type Shorts struct {
 	Id         int
@@ -14,7 +12,8 @@ type Shorts struct {
 
 // Query to add a new short to the database
 func InsertShortURL(targetUrl string, shorturl string) (string, error) {
-	dbConn := createDatabaseConnection()
+	dbConn := CreateDatabaseConnection()
+	defer dbConn.Close()
 	stmt, err := dbConn.Prepare("INSERT INTO links (targetUrl, requestKey) VALUES ($1, $2)")
 
 	if err != nil {
@@ -37,7 +36,8 @@ func GetShortByKey(requestKey string) (Shorts, error) {
 
 // Query to delete short with key
 func DeleteShortByKey(key string) error {
-	dbConn := createDatabaseConnection()
+	dbConn := CreateDatabaseConnection()
+	defer dbConn.Close()
 	stmt, err := dbConn.Prepare("DELETE FROM links WHERE requestKey = $1")
 
 	if err != nil {
@@ -53,9 +53,29 @@ func DeleteShortByKey(key string) error {
 	return nil
 }
 
+func CountRedirectUpByKey(key string) error {
+	dbConn := CreateDatabaseConnection()
+	defer dbConn.Close()
+	stmt, err := dbConn.Prepare("UPDATE links SET redirects = redirects + 1 WHERE requestKey = $1")
+
+	if err != nil {
+		return err
+	}
+
+	_, err = stmt.Exec(key)
+	
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
+
 // Returns a short according to the query
 func getShortBy(query string, value string) (Shorts, error) {
-	dbConn := createDatabaseConnection()
+	dbConn := CreateDatabaseConnection()
+	defer dbConn.Close()
 	stmt, err := dbConn.Prepare(query)
 
 	if err != nil {
@@ -71,15 +91,4 @@ func getShortBy(query string, value string) (Shorts, error) {
 	}
 
 	return short, nil
-}
-
-// Returns a connection to the database
-func createDatabaseConnection() *sql.DB {
-	dbConn, dbConnErr := NewAppDatabase()
-
-	if dbConnErr != nil {
-		panic(dbConnErr.Error())
-	}
-
-	return dbConn
 }

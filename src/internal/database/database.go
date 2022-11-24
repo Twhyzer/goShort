@@ -10,7 +10,7 @@ import (
 )
 
 // Connects to the database and migrates it if necessary.
-func NewAppDatabase() (*sql.DB, error) {
+func NewDatabase() (*sql.DB, error) {
 	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_PORT"),
@@ -28,4 +28,15 @@ func NewAppDatabase() (*sql.DB, error) {
 	MigrateDatabase(db, os.Getenv("POSTGRES_DATABASE_NAME"))
 
 	return db, nil
+}
+
+// Returns a connection to the database
+func CreateDatabaseConnection() *sql.DB {
+	dbConn, dbConnErr := NewDatabase()
+
+	if dbConnErr != nil {
+		panic(dbConnErr.Error())
+	}
+
+	return dbConn
 }
